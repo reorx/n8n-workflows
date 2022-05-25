@@ -1,1 +1,161 @@
-{"id": 8, "name": "github issues to tg", "active": false, "nodes": [{"parameters": {}, "name": "Start", "type": "n8n-nodes-base.start", "typeVersion": 1, "position": [-340, 540]}, {"parameters": {"chatId": "@reorx_share", "text": "=\u26a1\ufe0f {{$json[\"title\"]}} #github #issue\n\n{{$json[\"html_url\"]}}", "additionalFields": {"parse_mode": "HTML"}}, "name": "Telegram", "type": "n8n-nodes-base.telegram", "typeVersion": 1, "position": [400, 800], "credentials": {"telegramApi": {"id": "1", "name": "Telegram reorx_share_bot"}}}, {"parameters": {"unit": "hours"}, "name": "Interval", "type": "n8n-nodes-base.interval", "typeVersion": 1, "position": [-340, 820]}, {"parameters": {"authentication": "headerAuth", "url": "=https://api.github.com/search/issues?q={{encodeURIComponent('is:issue author:reorx is:public')}}", "options": {}}, "name": "HTTP Request", "type": "n8n-nodes-base.httpRequest", "typeVersion": 1, "position": [-120, 660], "credentials": {"httpHeaderAuth": {"id": "8", "name": "github PAT"}}}, {"parameters": {"functionCode": "/* only return new items */\nconst staticData = getWorkflowStaticData('global');\nconst lastItemId = staticData.lastItemId;\n\nconsole.log('lastItemId', lastItemId);\nconst firstItem = items[0];\nlet newItems = [];\n\nfunction getId(item) {\n  return item.json.id;\n}\n\nif (lastItemId) {\n  for (const item of items) {\n    if (getId(item) === lastItemId) {\n      break;\n    }\n    newItems.push(item)\n  }\n} else {\n  newItems = [firstItem]\n}\n\nstaticData.lastItemId = getId(firstItem)\nreturn newItems"}, "name": "Function1", "type": "n8n-nodes-base.function", "typeVersion": 1, "position": [220, 660]}, {"parameters": {"fieldToSplitOut": "items", "options": {}}, "name": "Item Lists", "type": "n8n-nodes-base.itemLists", "typeVersion": 1, "position": [60, 800]}], "connections": {"Start": {"main": [[{"node": "HTTP Request", "type": "main", "index": 0}]]}, "Interval": {"main": [[{"node": "HTTP Request", "type": "main", "index": 0}]]}, "HTTP Request": {"main": [[{"node": "Item Lists", "type": "main", "index": 0}]]}, "Item Lists": {"main": [[{"node": "Function1", "type": "main", "index": 0}]]}, "Function1": {"main": [[{"node": "Telegram", "type": "main", "index": 0}]]}}, "createdAt": "2022-05-24T17:23:28.596Z", "updatedAt": "2022-05-25T14:43:04.686Z", "settings": {"errorWorkflow": "12"}, "staticData": {"global": {}}}
+{
+  "id": 8,
+  "name": "github issues to tg",
+  "active": false,
+  "nodes": [
+    {
+      "parameters": {},
+      "name": "Start",
+      "type": "n8n-nodes-base.start",
+      "typeVersion": 1,
+      "position": [
+        -340,
+        540
+      ]
+    },
+    {
+      "parameters": {
+        "chatId": "@reorx_share",
+        "text": "=⚡️ {{$json[\"title\"]}} #github #issue\n\n{{$json[\"html_url\"]}}",
+        "additionalFields": {
+          "parse_mode": "HTML"
+        }
+      },
+      "name": "Telegram",
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1,
+      "position": [
+        400,
+        800
+      ],
+      "credentials": {
+        "telegramApi": {
+          "id": "1",
+          "name": "Telegram reorx_share_bot"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "unit": "hours"
+      },
+      "name": "Interval",
+      "type": "n8n-nodes-base.interval",
+      "typeVersion": 1,
+      "position": [
+        -340,
+        820
+      ]
+    },
+    {
+      "parameters": {
+        "authentication": "headerAuth",
+        "url": "=https://api.github.com/search/issues?q={{encodeURIComponent('is:issue author:reorx is:public')}}",
+        "options": {}
+      },
+      "name": "HTTP Request",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 1,
+      "position": [
+        -120,
+        660
+      ],
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "8",
+          "name": "github PAT"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "functionCode": "/* only return new items */\nconst staticData = getWorkflowStaticData('global');\nconst lastItemId = staticData.lastItemId;\n\nconsole.log('lastItemId', lastItemId);\nconst firstItem = items[0];\nlet newItems = [];\n\nfunction getId(item) {\n  return item.json.id;\n}\n\nif (lastItemId) {\n  for (const item of items) {\n    if (getId(item) === lastItemId) {\n      break;\n    }\n    newItems.push(item)\n  }\n} else {\n  newItems = [firstItem]\n}\n\nstaticData.lastItemId = getId(firstItem)\nreturn newItems"
+      },
+      "name": "Function1",
+      "type": "n8n-nodes-base.function",
+      "typeVersion": 1,
+      "position": [
+        220,
+        660
+      ]
+    },
+    {
+      "parameters": {
+        "fieldToSplitOut": "items",
+        "options": {}
+      },
+      "name": "Item Lists",
+      "type": "n8n-nodes-base.itemLists",
+      "typeVersion": 1,
+      "position": [
+        60,
+        800
+      ]
+    }
+  ],
+  "connections": {
+    "Start": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Interval": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP Request": {
+      "main": [
+        [
+          {
+            "node": "Item Lists",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Item Lists": {
+      "main": [
+        [
+          {
+            "node": "Function1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Function1": {
+      "main": [
+        [
+          {
+            "node": "Telegram",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "createdAt": "2022-05-24T17:23:28.596Z",
+  "updatedAt": "2022-05-25T14:43:04.686Z",
+  "settings": {
+    "errorWorkflow": "12"
+  },
+  "staticData": {
+    "global": {}
+  }
+}

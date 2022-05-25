@@ -36,7 +36,7 @@ def save_workflow(d, dest_dir):
     filepath = Path(dest_dir).joinpath(filename)
     print(f'write {filepath}')
     with open(filepath, 'w') as f:
-        f.write(json.dumps(d))
+        f.write(json.dumps(d, indent=2, ensure_ascii=False))
 
 
 if __name__ == '__main__':

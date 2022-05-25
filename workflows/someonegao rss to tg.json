@@ -1,1 +1,129 @@
-{"id": 3, "name": "someonegao rss to tg", "active": true, "nodes": [{"parameters": {}, "name": "Start", "type": "n8n-nodes-base.start", "typeVersion": 1, "position": [-180, 340]}, {"parameters": {"url": "https://someonegao.com/rss.xml"}, "name": "RSS Feed Read", "type": "n8n-nodes-base.rssFeedRead", "typeVersion": 1, "position": [80, 460]}, {"parameters": {"functionCode": "/* only return new items */\nconst staticData = getWorkflowStaticData('global');\nconst lastItemId = staticData.lastItemId;\n\nconsole.log('lastItemId', lastItemId);\nconst firstItem = items[0];\nlet newItems = [];\n\nfunction getId(item) {\n  return item.json.guid;\n}\n\nif (lastItemId) {\n  for (const item of items) {\n    if (getId(item) === lastItemId) {\n      break;\n    }\n    newItems.push(item)\n  }\n} else {\n  newItems = [firstItem]\n}\n\nstaticData.lastItemId = getId(firstItem)\nreturn newItems"}, "name": "Function", "type": "n8n-nodes-base.function", "typeVersion": 1, "position": [280, 460]}, {"parameters": {"chatId": "@reorx_share", "text": "=\ud83d\udcd6 {{$node[\"RSS Feed Read\"].json[\"title\"]}}#repost #someonegao\n\n{{$node[\"RSS Feed Read\"].json[\"link\"]}}", "additionalFields": {"parse_mode": "HTML"}}, "name": "Telegram", "type": "n8n-nodes-base.telegram", "typeVersion": 1, "position": [500, 460], "credentials": {"telegramApi": {"id": "1", "name": "Telegram reorx_share_bot"}}}, {"parameters": {"unit": "hours"}, "name": "Interval", "type": "n8n-nodes-base.interval", "typeVersion": 1, "position": [-200, 500]}], "connections": {"RSS Feed Read": {"main": [[{"node": "Function", "type": "main", "index": 0}]]}, "Function": {"main": [[{"node": "Telegram", "type": "main", "index": 0}]]}, "Start": {"main": [[{"node": "RSS Feed Read", "type": "main", "index": 0}]]}, "Interval": {"main": [[{"node": "RSS Feed Read", "type": "main", "index": 0}]]}}, "createdAt": "2022-05-23T05:24:08.354Z", "updatedAt": "2022-05-25T14:42:33.537Z", "settings": {"errorWorkflow": "12"}, "staticData": {"global": {}}}
+{
+  "id": 3,
+  "name": "someonegao rss to tg",
+  "active": true,
+  "nodes": [
+    {
+      "parameters": {},
+      "name": "Start",
+      "type": "n8n-nodes-base.start",
+      "typeVersion": 1,
+      "position": [
+        -180,
+        340
+      ]
+    },
+    {
+      "parameters": {
+        "url": "https://someonegao.com/rss.xml"
+      },
+      "name": "RSS Feed Read",
+      "type": "n8n-nodes-base.rssFeedRead",
+      "typeVersion": 1,
+      "position": [
+        80,
+        460
+      ]
+    },
+    {
+      "parameters": {
+        "functionCode": "/* only return new items */\nconst staticData = getWorkflowStaticData('global');\nconst lastItemId = staticData.lastItemId;\n\nconsole.log('lastItemId', lastItemId);\nconst firstItem = items[0];\nlet newItems = [];\n\nfunction getId(item) {\n  return item.json.guid;\n}\n\nif (lastItemId) {\n  for (const item of items) {\n    if (getId(item) === lastItemId) {\n      break;\n    }\n    newItems.push(item)\n  }\n} else {\n  newItems = [firstItem]\n}\n\nstaticData.lastItemId = getId(firstItem)\nreturn newItems"
+      },
+      "name": "Function",
+      "type": "n8n-nodes-base.function",
+      "typeVersion": 1,
+      "position": [
+        280,
+        460
+      ]
+    },
+    {
+      "parameters": {
+        "chatId": "@reorx_share",
+        "text": "=📖 {{$node[\"RSS Feed Read\"].json[\"title\"]}}#repost #someonegao\n\n{{$node[\"RSS Feed Read\"].json[\"link\"]}}",
+        "additionalFields": {
+          "parse_mode": "HTML"
+        }
+      },
+      "name": "Telegram",
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1,
+      "position": [
+        500,
+        460
+      ],
+      "credentials": {
+        "telegramApi": {
+          "id": "1",
+          "name": "Telegram reorx_share_bot"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "unit": "hours"
+      },
+      "name": "Interval",
+      "type": "n8n-nodes-base.interval",
+      "typeVersion": 1,
+      "position": [
+        -200,
+        500
+      ]
+    }
+  ],
+  "connections": {
+    "RSS Feed Read": {
+      "main": [
+        [
+          {
+            "node": "Function",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Function": {
+      "main": [
+        [
+          {
+            "node": "Telegram",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Start": {
+      "main": [
+        [
+          {
+            "node": "RSS Feed Read",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Interval": {
+      "main": [
+        [
+          {
+            "node": "RSS Feed Read",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "createdAt": "2022-05-23T05:24:08.354Z",
+  "updatedAt": "2022-05-25T14:42:33.537Z",
+  "settings": {
+    "errorWorkflow": "12"
+  },
+  "staticData": {
+    "global": {}
+  }
+}

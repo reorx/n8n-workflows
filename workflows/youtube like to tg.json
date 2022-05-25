@@ -1,1 +1,140 @@
-{"id": 5, "name": "youtube like to tg", "active": true, "nodes": [{"parameters": {}, "name": "Start", "type": "n8n-nodes-base.start", "typeVersion": 1, "position": [240, 300]}, {"parameters": {"resource": "playlistItem", "operation": "getAll", "playlistId": "=LL", "limit": 10, "options": {}}, "name": "YouTube", "type": "n8n-nodes-base.youTube", "typeVersion": 1, "position": [460, 300], "credentials": {"youTubeOAuth2Api": {"id": "5", "name": "YouTube account"}}}, {"parameters": {"functionCode": "const staticData = getWorkflowStaticData('global');\nconst lastItemId = staticData.lastItemId;\n\nconsole.log('lastItemId', lastItemId);\nconst firstItem = items[0];\nlet newItems = [];\n\nfunction getId(item) {\n  return item.json.contentDetails.videoId;\n}\n\nif (lastItemId) {\n  for (const item of items) {\n    if (getId(item) === lastItemId) {\n      break;\n    }\n    newItems.push(item)\n  }\n} else {\n  newItems = [firstItem]\n}\n\nstaticData.lastItemId = getId(firstItem)\nreturn newItems"}, "name": "Function", "type": "n8n-nodes-base.function", "typeVersion": 1, "position": [680, 300]}, {"parameters": {"chatId": "@reorx_share", "text": "=\u25b6\ufe0f {{$json[\"snippet\"][\"title\"]}} #youtube\n\nhttps://www.youtube.com/watch?v={{$json[\"contentDetails\"][\"videoId\"]}}", "additionalFields": {"parse_mode": "HTML"}}, "name": "Telegram", "type": "n8n-nodes-base.telegram", "typeVersion": 1, "position": [880, 300], "credentials": {"telegramApi": {"id": "1", "name": "Telegram reorx_share_bot"}}}, {"parameters": {"interval": 30, "unit": "minutes"}, "name": "Interval", "type": "n8n-nodes-base.interval", "typeVersion": 1, "position": [220, 500]}], "connections": {"Start": {"main": [[{"node": "YouTube", "type": "main", "index": 0}]]}, "YouTube": {"main": [[{"node": "Function", "type": "main", "index": 0}]]}, "Function": {"main": [[{"node": "Telegram", "type": "main", "index": 0}]]}, "Interval": {"main": [[{"node": "YouTube", "type": "main", "index": 0}]]}}, "createdAt": "2022-05-23T09:26:33.126Z", "updatedAt": "2022-05-25T14:43:12.874Z", "settings": {"errorWorkflow": "12"}, "staticData": {"global": {}}}
+{
+  "id": 5,
+  "name": "youtube like to tg",
+  "active": true,
+  "nodes": [
+    {
+      "parameters": {},
+      "name": "Start",
+      "type": "n8n-nodes-base.start",
+      "typeVersion": 1,
+      "position": [
+        240,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "resource": "playlistItem",
+        "operation": "getAll",
+        "playlistId": "=LL",
+        "limit": 10,
+        "options": {}
+      },
+      "name": "YouTube",
+      "type": "n8n-nodes-base.youTube",
+      "typeVersion": 1,
+      "position": [
+        460,
+        300
+      ],
+      "credentials": {
+        "youTubeOAuth2Api": {
+          "id": "5",
+          "name": "YouTube account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "functionCode": "const staticData = getWorkflowStaticData('global');\nconst lastItemId = staticData.lastItemId;\n\nconsole.log('lastItemId', lastItemId);\nconst firstItem = items[0];\nlet newItems = [];\n\nfunction getId(item) {\n  return item.json.contentDetails.videoId;\n}\n\nif (lastItemId) {\n  for (const item of items) {\n    if (getId(item) === lastItemId) {\n      break;\n    }\n    newItems.push(item)\n  }\n} else {\n  newItems = [firstItem]\n}\n\nstaticData.lastItemId = getId(firstItem)\nreturn newItems"
+      },
+      "name": "Function",
+      "type": "n8n-nodes-base.function",
+      "typeVersion": 1,
+      "position": [
+        680,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "chatId": "@reorx_share",
+        "text": "=▶️ {{$json[\"snippet\"][\"title\"]}} #youtube\n\nhttps://www.youtube.com/watch?v={{$json[\"contentDetails\"][\"videoId\"]}}",
+        "additionalFields": {
+          "parse_mode": "HTML"
+        }
+      },
+      "name": "Telegram",
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1,
+      "position": [
+        880,
+        300
+      ],
+      "credentials": {
+        "telegramApi": {
+          "id": "1",
+          "name": "Telegram reorx_share_bot"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "interval": 30,
+        "unit": "minutes"
+      },
+      "name": "Interval",
+      "type": "n8n-nodes-base.interval",
+      "typeVersion": 1,
+      "position": [
+        220,
+        500
+      ]
+    }
+  ],
+  "connections": {
+    "Start": {
+      "main": [
+        [
+          {
+            "node": "YouTube",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "YouTube": {
+      "main": [
+        [
+          {
+            "node": "Function",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Function": {
+      "main": [
+        [
+          {
+            "node": "Telegram",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Interval": {
+      "main": [
+        [
+          {
+            "node": "YouTube",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "createdAt": "2022-05-23T09:26:33.126Z",
+  "updatedAt": "2022-05-25T14:43:12.874Z",
+  "settings": {
+    "errorWorkflow": "12"
+  },
+  "staticData": {
+    "global": {}
+  }
+}

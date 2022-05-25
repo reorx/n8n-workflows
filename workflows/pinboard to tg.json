@@ -1,1 +1,170 @@
-{"id": 11, "name": "pinboard to tg", "active": true, "nodes": [{"parameters": {}, "name": "Start", "type": "n8n-nodes-base.start", "typeVersion": 1, "position": [-340, 540]}, {"parameters": {"chatId": "@reorx_share", "text": "=\ud83d\udd16 {{$json[\"description\"]}} #bookmark #pinboard \n\n{{$json[\"href\"]}}\n{{$json[\"tagsHTML\"]}}", "additionalFields": {"parse_mode": "HTML"}}, "name": "Telegram", "type": "n8n-nodes-base.telegram", "typeVersion": 1, "position": [400, 800], "credentials": {"telegramApi": {"id": "1", "name": "Telegram reorx_share_bot"}}}, {"parameters": {"interval": 5, "unit": "minutes"}, "name": "Interval", "type": "n8n-nodes-base.interval", "typeVersion": 1, "position": [-340, 820]}, {"parameters": {"authentication": "queryAuth", "url": "=https://api.pinboard.in/v1/posts/recent", "options": {}, "queryParametersUi": {"parameter": [{"name": "format", "value": "json"}]}}, "name": "HTTP Request", "type": "n8n-nodes-base.httpRequest", "typeVersion": 1, "position": [-120, 660], "credentials": {"httpQueryAuth": {"id": "9", "name": "pinboard token in qs"}}}, {"parameters": {"fieldToSplitOut": "posts", "options": {}}, "name": "Item Lists", "type": "n8n-nodes-base.itemLists", "typeVersion": 1, "position": [60, 800]}, {"parameters": {"functionCode": "/* filter items */\nitems = items.filter(item => item.json.shared === 'yes')\n\n/* only return new items */\nconst staticData = getWorkflowStaticData('global');\nconst lastItemId = staticData.lastItemId;\n\nconsole.log('lastItemId', lastItemId);\nconst firstItem = items[0];\nlet newItems = [];\n\nfunction getId(item) {\n  return item.json.hash;\n}\n\nfunction addProperties(item) {\n  // add new property: tagsHTML\n  item.json.tagsHTML = item.json.tags.split(' ').map(i => `<code>${i}</code>`).join(', ')\n  return item\n}\n\nif (lastItemId) {\n  for (const item of items) {\n    if (getId(item) === lastItemId) {\n      break;\n    }\n    newItems.push(addProperties(item))\n  }\n} else {\n  newItems = [addProperties(firstItem)]\n}\n\nstaticData.lastItemId = getId(firstItem)\nreturn newItems"}, "name": "Function", "type": "n8n-nodes-base.function", "typeVersion": 1, "position": [220, 660]}], "connections": {"Start": {"main": [[{"node": "HTTP Request", "type": "main", "index": 0}]]}, "Interval": {"main": [[{"node": "HTTP Request", "type": "main", "index": 0}]]}, "HTTP Request": {"main": [[{"node": "Item Lists", "type": "main", "index": 0}]]}, "Item Lists": {"main": [[{"node": "Function", "type": "main", "index": 0}]]}, "Function": {"main": [[{"node": "Telegram", "type": "main", "index": 0}]]}}, "createdAt": "2022-05-25T12:49:47.918Z", "updatedAt": "2022-05-25T14:41:10.923Z", "settings": {"errorWorkflow": "12"}, "staticData": {"global": {}}}
+{
+  "id": 11,
+  "name": "pinboard to tg",
+  "active": true,
+  "nodes": [
+    {
+      "parameters": {},
+      "name": "Start",
+      "type": "n8n-nodes-base.start",
+      "typeVersion": 1,
+      "position": [
+        -340,
+        540
+      ]
+    },
+    {
+      "parameters": {
+        "chatId": "@reorx_share",
+        "text": "=🔖 {{$json[\"description\"]}} #bookmark #pinboard \n\n{{$json[\"href\"]}}\n{{$json[\"tagsHTML\"]}}",
+        "additionalFields": {
+          "parse_mode": "HTML"
+        }
+      },
+      "name": "Telegram",
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1,
+      "position": [
+        400,
+        800
+      ],
+      "credentials": {
+        "telegramApi": {
+          "id": "1",
+          "name": "Telegram reorx_share_bot"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "interval": 5,
+        "unit": "minutes"
+      },
+      "name": "Interval",
+      "type": "n8n-nodes-base.interval",
+      "typeVersion": 1,
+      "position": [
+        -340,
+        820
+      ]
+    },
+    {
+      "parameters": {
+        "authentication": "queryAuth",
+        "url": "=https://api.pinboard.in/v1/posts/recent",
+        "options": {},
+        "queryParametersUi": {
+          "parameter": [
+            {
+              "name": "format",
+              "value": "json"
+            }
+          ]
+        }
+      },
+      "name": "HTTP Request",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 1,
+      "position": [
+        -120,
+        660
+      ],
+      "credentials": {
+        "httpQueryAuth": {
+          "id": "9",
+          "name": "pinboard token in qs"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "fieldToSplitOut": "posts",
+        "options": {}
+      },
+      "name": "Item Lists",
+      "type": "n8n-nodes-base.itemLists",
+      "typeVersion": 1,
+      "position": [
+        60,
+        800
+      ]
+    },
+    {
+      "parameters": {
+        "functionCode": "/* filter items */\nitems = items.filter(item => item.json.shared === 'yes')\n\n/* only return new items */\nconst staticData = getWorkflowStaticData('global');\nconst lastItemId = staticData.lastItemId;\n\nconsole.log('lastItemId', lastItemId);\nconst firstItem = items[0];\nlet newItems = [];\n\nfunction getId(item) {\n  return item.json.hash;\n}\n\nfunction addProperties(item) {\n  // add new property: tagsHTML\n  item.json.tagsHTML = item.json.tags.split(' ').map(i => `<code>${i}</code>`).join(', ')\n  return item\n}\n\nif (lastItemId) {\n  for (const item of items) {\n    if (getId(item) === lastItemId) {\n      break;\n    }\n    newItems.push(addProperties(item))\n  }\n} else {\n  newItems = [addProperties(firstItem)]\n}\n\nstaticData.lastItemId = getId(firstItem)\nreturn newItems"
+      },
+      "name": "Function",
+      "type": "n8n-nodes-base.function",
+      "typeVersion": 1,
+      "position": [
+        220,
+        660
+      ]
+    }
+  ],
+  "connections": {
+    "Start": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Interval": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP Request": {
+      "main": [
+        [
+          {
+            "node": "Item Lists",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Item Lists": {
+      "main": [
+        [
+          {
+            "node": "Function",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Function": {
+      "main": [
+        [
+          {
+            "node": "Telegram",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "createdAt": "2022-05-25T12:49:47.918Z",
+  "updatedAt": "2022-05-25T14:41:10.923Z",
+  "settings": {
+    "errorWorkflow": "12"
+  },
+  "staticData": {
+    "global": {}
+  }
+}
