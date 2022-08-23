@@ -1,6 +1,6 @@
 {
-  "id": 5,
-  "name": "youtube like to tg",
+  "id": 7,
+  "name": "spotify like to tg",
   "active": true,
   "nodes": [
     {
@@ -9,48 +9,45 @@
       "type": "n8n-nodes-base.start",
       "typeVersion": 1,
       "position": [
-        240,
+        260,
         300
       ]
     },
     {
       "parameters": {
-        "resource": "playlistItem",
-        "operation": "getAll",
-        "playlistId": "=LL",
-        "limit": 10,
-        "options": {}
+        "resource": "library",
+        "limit": 10
       },
-      "name": "YouTube",
-      "type": "n8n-nodes-base.youTube",
-      "typeVersion": 1,
+      "name": "Get liked tracks",
+      "type": "n8n-nodes-base.spotify",
       "position": [
-        460,
+        500,
         300
       ],
+      "typeVersion": 1,
       "credentials": {
-        "youTubeOAuth2Api": {
-          "id": "5",
-          "name": "YouTube account"
+        "spotifyOAuth2Api": {
+          "id": "6",
+          "name": "Spotify account"
         }
       }
     },
     {
       "parameters": {
-        "functionCode": "const staticData = getWorkflowStaticData('global');\nconst lastItemId = staticData.lastItemId;\n\nconsole.log('lastItemId', lastItemId);\nconst firstItem = items[0];\nlet newItems = [];\n\nfunction getId(item) {\n  return item.json.contentDetails.videoId;\n}\n\nif (lastItemId) {\n  for (const item of items) {\n    if (getId(item) === lastItemId) {\n      break;\n    }\n    newItems.push(item)\n  }\n} else {\n  newItems = [firstItem]\n}\n\nstaticData.lastItemId = getId(firstItem)\nreturn newItems.reverse()"
+        "functionCode": "const staticData = getWorkflowStaticData('global');\nconst lastItemId = staticData.lastItemId;\n\nconsole.log('lastItemId', lastItemId);\nconst firstItem = items[0];\nlet newItems = [];\n\nfunction getId(item) {\n  return item.json.track.id;\n}\n\nif (lastItemId) {\n  for (const item of items) {\n    if (getId(item) === lastItemId) {\n      break;\n    }\n    newItems.push(item)\n  }\n} else {\n  newItems = [firstItem]\n}\n\nstaticData.lastItemId = getId(firstItem)\nreturn newItems.reverse()"
       },
       "name": "Function",
       "type": "n8n-nodes-base.function",
       "typeVersion": 1,
       "position": [
-        660,
+        720,
         300
       ]
     },
     {
       "parameters": {
         "chatId": "@reorx_share",
-        "text": "=▶️ {{$json[\"snippet\"][\"title\"]}} #youtube\n\nhttps://www.youtube.com/watch?v={{$json[\"contentDetails\"][\"videoId\"]}}",
+        "text": "=🎵 <u>{{$json[\"track\"][\"name\"]}}</u> by <em>{{$json[\"track\"][\"artists\"][0][\"name\"]}}</em> #music #spotify\n\nhttps://open.spotify.com/track/{{$json[\"track\"][\"id\"]}}",
         "additionalFields": {
           "parse_mode": "HTML"
         }
@@ -59,7 +56,7 @@
       "type": "n8n-nodes-base.telegram",
       "typeVersion": 1,
       "position": [
-        860,
+        920,
         300
       ],
       "credentials": {
@@ -71,15 +68,15 @@
     },
     {
       "parameters": {
-        "interval": 30,
+        "interval": 15,
         "unit": "minutes"
       },
       "name": "Interval",
       "type": "n8n-nodes-base.interval",
       "typeVersion": 1,
       "position": [
-        240,
-        500
+        260,
+        520
       ]
     }
   ],
@@ -88,14 +85,14 @@
       "main": [
         [
           {
-            "node": "YouTube",
+            "node": "Get liked tracks",
             "type": "main",
             "index": 0
           }
         ]
       ]
     },
-    "YouTube": {
+    "Get liked tracks": {
       "main": [
         [
           {
@@ -121,7 +118,7 @@
       "main": [
         [
           {
-            "node": "YouTube",
+            "node": "Get liked tracks",
             "type": "main",
             "index": 0
           }
@@ -129,8 +126,8 @@
       ]
     }
   },
-  "createdAt": "2022-05-23T09:26:33.126Z",
-  "updatedAt": "2022-08-23T14:45:15.000Z",
+  "createdAt": "2022-05-23T17:28:53.784Z",
+  "updatedAt": "2022-08-23T15:15:21.000Z",
   "settings": {
     "errorWorkflow": "12"
   },

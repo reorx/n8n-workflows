@@ -21,20 +21,20 @@
       "type": "n8n-nodes-base.rssFeedRead",
       "typeVersion": 1,
       "position": [
-        80,
-        460
+        40,
+        340
       ]
     },
     {
       "parameters": {
-        "functionCode": "/* only return new items */\nconst staticData = getWorkflowStaticData('global');\nconst lastItemId = staticData.lastItemId;\n\nconsole.log('lastItemId', lastItemId);\nconst firstItem = items[0];\nlet newItems = [];\n\nfunction getId(item) {\n  return item.json.guid;\n}\n\nif (lastItemId) {\n  for (const item of items) {\n    if (getId(item) === lastItemId) {\n      break;\n    }\n    newItems.push(item)\n  }\n} else {\n  newItems = [firstItem]\n}\n\nstaticData.lastItemId = getId(firstItem)\nreturn newItems"
+        "functionCode": "/* only return new items */\nconst staticData = getWorkflowStaticData('global');\nconst lastItemId = staticData.lastItemId;\n\nconsole.log('lastItemId', lastItemId);\nconst firstItem = items[0];\nlet newItems = [];\n\nfunction getId(item) {\n  return item.json.guid;\n}\n\nif (lastItemId) {\n  for (const item of items) {\n    if (getId(item) === lastItemId) {\n      break;\n    }\n    newItems.push(item)\n  }\n} else {\n  newItems = [firstItem]\n}\n\nstaticData.lastItemId = getId(firstItem)\nreturn newItems.reverse();"
       },
       "name": "Function",
       "type": "n8n-nodes-base.function",
       "typeVersion": 1,
       "position": [
-        460,
-        480
+        380,
+        340
       ]
     },
     {
@@ -49,8 +49,8 @@
       "type": "n8n-nodes-base.telegram",
       "typeVersion": 1,
       "position": [
-        640,
-        340
+        540,
+        500
       ],
       "credentials": {
         "telegramApi": {
@@ -68,7 +68,7 @@
       "type": "n8n-nodes-base.interval",
       "typeVersion": 1,
       "position": [
-        -200,
+        -180,
         500
       ]
     },
@@ -80,8 +80,8 @@
       "type": "n8n-nodes-base.function",
       "typeVersion": 1,
       "position": [
-        280,
-        320
+        220,
+        500
       ]
     }
   ],
@@ -143,7 +143,7 @@
     }
   },
   "createdAt": "2022-05-25T08:35:40.627Z",
-  "updatedAt": "2022-05-25T14:42:07.480Z",
+  "updatedAt": "2022-08-23T15:15:21.000Z",
   "settings": {
     "errorWorkflow": "12"
   },

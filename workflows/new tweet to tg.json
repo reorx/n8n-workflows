@@ -10,7 +10,7 @@
       "typeVersion": 1,
       "position": [
         100,
-        340
+        380
       ]
     },
     {
@@ -18,7 +18,8 @@
         "operation": "search",
         "searchText": "from:novoreorx",
         "additionalFields": {
-          "resultType": "recent"
+          "resultType": "recent",
+          "tweetMode": "extended"
         }
       },
       "name": "Twitter",
@@ -37,13 +38,13 @@
     },
     {
       "parameters": {
-        "functionCode": "const new_items = [];\nconst data = this.getWorkflowStaticData('node');\n\ndata.ids = data.ids || [];\n\n\nif (data.ids.length === 0) {\n  // only first item\n  const firstItem = items[0]\n  new_items.push(firstItem)\n} else {\n  for (var i=0; i<items.length; i++) {\n    if (data.ids.includes(items[i].json.id)) {\n      break;\n    } else {\n      new_items.push({json: items[i].json});\n    }\n  }\n}\n\ndata.ids = items.map(item => item.json.id)\nreturn new_items;\n"
+        "functionCode": "const new_items = [];\nconst data = this.getWorkflowStaticData('node');\n\ndata.ids = data.ids || [];\n\n\nif (data.ids.length === 0) {\n  // only first item\n  const firstItem = items[0]\n  new_items.push(firstItem)\n} else {\n  for (var i=0; i<items.length; i++) {\n    if (data.ids.includes(items[i].json.id)) {\n      break;\n    } else {\n      new_items.push({json: items[i].json});\n    }\n  }\n}\n\ndata.ids = items.map(item => item.json.id)\nreturn new_items.reverse();"
       },
       "name": "Function",
       "type": "n8n-nodes-base.function",
       "position": [
-        780,
-        600
+        740,
+        400
       ],
       "typeVersion": 1
     },
@@ -64,7 +65,7 @@
             },
             {
               "name": "tweet",
-              "value": "={{$json[\"text\"]}}"
+              "value": "={{$json[\"full_text\"]}}"
             },
             {
               "name": "username",
@@ -84,7 +85,23 @@
             },
             {
               "name": "retweetedUrl",
-              "value": "=https://twitter.com/{{$json[\"retweeted_status\"][\"user\"][\"screen_name\"]}}/status/{{$json[\"id_str\"]}}"
+              "value": "=https://twitter.com/{{$json[\"retweeted_status\"][\"user\"][\"screen_name\"]}}/status/{{$json[\"retweeted_status\"][\"id_str\"]}}"
+            },
+            {
+              "name": "proxyUrl",
+              "value": "=https://vxtwitter.com/{{$json[\"user\"][\"screen_name\"]}}/status/{{$json[\"id_str\"]}}"
+            },
+            {
+              "name": "retweetedFullText",
+              "value": "={{$json[\"retweeted_status\"][\"full_text\"]}}"
+            },
+            {
+              "name": "retweetedProxyUrl",
+              "value": "=https://vxtwitter.com/{{$json[\"retweeted_status\"][\"user\"][\"screen_name\"]}}/status/{{$json[\"retweeted_status\"][\"id_str\"]}}"
+            },
+            {
+              "name": "retweetedUsername",
+              "value": "={{$json[\"retweeted_status\"][\"user\"][\"screen_name\"]}}"
             }
           ],
           "boolean": [
@@ -109,7 +126,7 @@
     {
       "parameters": {
         "chatId": "@reorx_share",
-        "text": "=🐦 {{$json[\"tweet\"]}} {{$json[\"retweeted\"] ? \"#retweet\" : \"#tweet\"}}\n\n<a href=\"{{$json[\"url\"]}} \">source</a>",
+        "text": "=<a href=\"{{$json[\"retweeted\"] ? $json[\"retweetedProxyUrl\"] : $json[\"proxyUrl\"]}} \">🐦</a> {{$json[\"retweeted\"] ? \"RT @\" + $json[\"retweetedUsername\"] + \": \" + $json[\"retweetedFullText\"] : $json[\"tweet\"]}}\n\n<a href=\"{{$json[\"retweeted\"] ? $json[\"retweetedUrl\"] : $json[\"url\"]}} \">↩</a>  {{$json[\"retweeted\"] ? \"#retweet\" : \"#tweet\"}}",
         "additionalFields": {
           "parse_mode": "HTML"
         }
@@ -118,8 +135,8 @@
       "type": "n8n-nodes-base.telegram",
       "typeVersion": 1,
       "position": [
-        1000,
-        600
+        900,
+        580
       ],
       "credentials": {
         "telegramApi": {
@@ -156,7 +173,7 @@
       "type": "n8n-nodes-base.if",
       "typeVersion": 1,
       "position": [
-        420,
+        440,
         400
       ]
     }
@@ -231,7 +248,7 @@
     }
   },
   "createdAt": "2022-05-22T17:09:46.801Z",
-  "updatedAt": "2022-05-25T14:41:23.188Z",
+  "updatedAt": "2022-08-23T15:17:04.000Z",
   "settings": {
     "errorWorkflow": "12"
   },

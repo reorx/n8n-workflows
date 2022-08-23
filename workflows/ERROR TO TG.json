@@ -25,8 +25,8 @@
     },
     {
       "parameters": {
-        "chatId": "-778621789",
-        "text": "=<b>n8n workflow error</b> #n8n-error\n<a href=\"{{$json[\"execution\"][\"url\"]}}\">{{$json[\"workflow\"][\"name\"]}}</a>\n\nError: <code>{{$json[\"execution\"][\"error\"][\"message\"]}}</code>\n<pre><code>{{$json[\"execution\"][\"error\"][\"stack\"]}}</code></pre>",
+        "chatId": "-511781934",
+        "text": "=<b>n8n workflow error</b> #n8n #error\n<a href=\"{{$json[\"execution\"][\"url\"]}}\">{{$json[\"workflow\"][\"name\"]}}</a>\n\nError: <code>{{$json[\"execution\"][\"error\"][\"message\"]}}</code>\n\n<pre><code>{{$json[\"execution\"][\"error\"][\"stack\"]}}</code></pre>",
         "additionalFields": {
           "disable_web_page_preview": true,
           "parse_mode": "HTML"
@@ -61,7 +61,7 @@
     }
   },
   "createdAt": "2022-05-25T14:29:13.869Z",
-  "updatedAt": "2022-05-25T14:39:24.920Z",
+  "updatedAt": "2022-05-31T07:37:17.241Z",
   "settings": {},
   "staticData": null
 }

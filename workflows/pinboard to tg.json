@@ -10,7 +10,7 @@
       "typeVersion": 1,
       "position": [
         -340,
-        540
+        660
       ]
     },
     {
@@ -25,7 +25,7 @@
       "type": "n8n-nodes-base.telegram",
       "typeVersion": 1,
       "position": [
-        400,
+        380,
         800
       ],
       "credentials": {
@@ -91,7 +91,7 @@
     },
     {
       "parameters": {
-        "functionCode": "/* filter items */\nitems = items.filter(item => item.json.shared === 'yes')\n\n/* only return new items */\nconst staticData = getWorkflowStaticData('global');\nconst lastItemId = staticData.lastItemId;\n\nconsole.log('lastItemId', lastItemId);\nconst firstItem = items[0];\nlet newItems = [];\n\nfunction getId(item) {\n  return item.json.hash;\n}\n\nfunction addProperties(item) {\n  // add new property: tagsHTML\n  item.json.tagsHTML = item.json.tags.split(' ').map(i => `<code>${i}</code>`).join(', ')\n  return item\n}\n\nif (lastItemId) {\n  for (const item of items) {\n    if (getId(item) === lastItemId) {\n      break;\n    }\n    newItems.push(addProperties(item))\n  }\n} else {\n  newItems = [addProperties(firstItem)]\n}\n\nstaticData.lastItemId = getId(firstItem)\nreturn newItems"
+        "functionCode": "/* filter items */\nitems = items.filter(item => item.json.shared === 'yes')\n\n/* only return new items */\nconst staticData = getWorkflowStaticData('global');\nconst lastItemId = staticData.lastItemId;\n\nconsole.log('lastItemId', lastItemId);\nconst firstItem = items[0];\nlet newItems = [];\n\nfunction getId(item) {\n  return item.json.hash;\n}\n\nfunction addProperties(item) {\n  // add new property: tagsHTML\n  item.json.tagsHTML = item.json.tags.split(' ').map(i => `<code>${i}</code>`).join(', ')\n  return item\n}\n\nif (lastItemId) {\n  for (const item of items) {\n    if (getId(item) === lastItemId) {\n      break;\n    }\n    newItems.push(addProperties(item))\n  }\n} else {\n  newItems = [addProperties(firstItem)]\n}\n\nstaticData.lastItemId = getId(firstItem)\nreturn newItems.reverse()"
       },
       "name": "Function",
       "type": "n8n-nodes-base.function",
@@ -160,7 +160,7 @@
     }
   },
   "createdAt": "2022-05-25T12:49:47.918Z",
-  "updatedAt": "2022-05-25T14:41:10.923Z",
+  "updatedAt": "2022-08-23T15:20:22.000Z",
   "settings": {
     "errorWorkflow": "12"
   },

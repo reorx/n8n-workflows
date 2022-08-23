@@ -1,7 +1,7 @@
 {
   "id": 3,
   "name": "someonegao rss to tg",
-  "active": true,
+  "active": false,
   "nodes": [
     {
       "parameters": {},
@@ -9,8 +9,8 @@
       "type": "n8n-nodes-base.start",
       "typeVersion": 1,
       "position": [
-        -180,
-        340
+        -160,
+        460
       ]
     },
     {
@@ -27,7 +27,7 @@
     },
     {
       "parameters": {
-        "functionCode": "/* only return new items */\nconst staticData = getWorkflowStaticData('global');\nconst lastItemId = staticData.lastItemId;\n\nconsole.log('lastItemId', lastItemId);\nconst firstItem = items[0];\nlet newItems = [];\n\nfunction getId(item) {\n  return item.json.guid;\n}\n\nif (lastItemId) {\n  for (const item of items) {\n    if (getId(item) === lastItemId) {\n      break;\n    }\n    newItems.push(item)\n  }\n} else {\n  newItems = [firstItem]\n}\n\nstaticData.lastItemId = getId(firstItem)\nreturn newItems"
+        "functionCode": "/* only return new items */\nconst staticData = getWorkflowStaticData('global');\nconst lastItemId = staticData.lastItemId;\n\nconsole.log('lastItemId', lastItemId);\nconst firstItem = items[0];\nlet newItems = [];\n\nfunction getId(item) {\n  return item.json.guid;\n}\n\nif (lastItemId) {\n  for (const item of items) {\n    if (getId(item) === lastItemId) {\n      break;\n    }\n    newItems.push(item)\n  }\n} else {\n  newItems = [firstItem]\n}\n\nstaticData.lastItemId = getId(firstItem)\nreturn newItems.reverse()"
       },
       "name": "Function",
       "type": "n8n-nodes-base.function",
@@ -40,7 +40,7 @@
     {
       "parameters": {
         "chatId": "@reorx_share",
-        "text": "=📖 {{$node[\"RSS Feed Read\"].json[\"title\"]}}#repost #someonegao\n\n{{$node[\"RSS Feed Read\"].json[\"link\"]}}",
+        "text": "=📖 {{$node[\"RSS Feed Read\"].json[\"title\"]}} #repost #someonegao\n\n{{$node[\"RSS Feed Read\"].json[\"link\"]}}",
         "additionalFields": {
           "parse_mode": "HTML"
         }
@@ -67,8 +67,8 @@
       "type": "n8n-nodes-base.interval",
       "typeVersion": 1,
       "position": [
-        -200,
-        500
+        -160,
+        640
       ]
     }
   ],
@@ -119,7 +119,7 @@
     }
   },
   "createdAt": "2022-05-23T05:24:08.354Z",
-  "updatedAt": "2022-05-25T14:42:33.537Z",
+  "updatedAt": "2022-07-05T06:09:59.819Z",
   "settings": {
     "errorWorkflow": "12"
   },
