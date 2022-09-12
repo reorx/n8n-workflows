@@ -1,0 +1,254 @@
+{
+  "id": 4,
+  "name": "tweet to tg",
+  "active": true,
+  "nodes": [
+    {
+      "parameters": {},
+      "id": "b0db4000-80d5-4a49-b3e2-556ac07b6da6",
+      "name": "Start",
+      "type": "n8n-nodes-base.start",
+      "typeVersion": 1,
+      "position": [
+        440,
+        400
+      ]
+    },
+    {
+      "parameters": {
+        "operation": "search",
+        "searchText": "from:novoreorx",
+        "additionalFields": {
+          "resultType": "recent",
+          "tweetMode": "extended"
+        }
+      },
+      "name": "Twitter",
+      "type": "n8n-nodes-base.twitter",
+      "position": [
+        640,
+        640
+      ],
+      "typeVersion": 1,
+      "id": "74ff148c-36b7-4f15-a9c2-7071518515bf",
+      "credentials": {
+        "twitterOAuth1Api": {
+          "id": "12",
+          "name": "Twitter OAuth account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "functionCode": "const new_items = [];\nconst data = this.getWorkflowStaticData('node');\n\ndata.ids = data.ids || [];\n\n\nif (data.ids.length === 0) {\n  // only first item\n  const firstItem = items[0]\n  new_items.push(firstItem)\n} else {\n  for (var i=0; i<items.length; i++) {\n    if (data.ids.includes(items[i].json.id)) {\n      break;\n    } else {\n      new_items.push({json: items[i].json});\n    }\n  }\n}\n\ndata.ids = items.map(item => item.json.id)\nreturn new_items.reverse();"
+      },
+      "name": "Function",
+      "type": "n8n-nodes-base.function",
+      "position": [
+        1080,
+        460
+      ],
+      "typeVersion": 1,
+      "id": "f1ab278b-5b5f-40ec-bcf1-01ffa1b81b54"
+    },
+    {
+      "parameters": {
+        "keepOnlySet": true,
+        "values": {
+          "number": [
+            {
+              "name": "id",
+              "value": "={{$json[\"id\"]}}"
+            }
+          ],
+          "string": [
+            {
+              "name": "url",
+              "value": "=https://twitter.com/{{$json[\"user\"][\"screen_name\"]}}/status/{{$json[\"id_str\"]}}"
+            },
+            {
+              "name": "tweet",
+              "value": "={{$json[\"full_text\"]}}"
+            },
+            {
+              "name": "username",
+              "value": "={{$node[\"Twitter\"].json[\"user\"][\"screen_name\"]}}"
+            },
+            {
+              "name": "photo",
+              "value": "={{$json[\"user\"][\"profile_image_url_https\"]}}"
+            },
+            {
+              "name": "name",
+              "value": "={{$json[\"user\"][\"name\"]}}"
+            },
+            {
+              "name": "color",
+              "value": "={{$json[\"user\"][\"profile_link_color\"]}}"
+            },
+            {
+              "name": "retweetedUrl",
+              "value": "=https://twitter.com/{{$json[\"retweeted_status\"][\"user\"][\"screen_name\"]}}/status/{{$json[\"retweeted_status\"][\"id_str\"]}}"
+            },
+            {
+              "name": "proxyUrl",
+              "value": "=https://vxtwitter.com/{{$json[\"user\"][\"screen_name\"]}}/status/{{$json[\"id_str\"]}}"
+            },
+            {
+              "name": "retweetedFullText",
+              "value": "={{$json[\"retweeted_status\"][\"full_text\"]}}"
+            },
+            {
+              "name": "retweetedProxyUrl",
+              "value": "=https://vxtwitter.com/{{$json[\"retweeted_status\"][\"user\"][\"screen_name\"]}}/status/{{$json[\"retweeted_status\"][\"id_str\"]}}"
+            },
+            {
+              "name": "retweetedUsername",
+              "value": "={{$json[\"retweeted_status\"][\"user\"][\"screen_name\"]}}"
+            }
+          ],
+          "boolean": [
+            {
+              "name": "retweeted",
+              "value": "={{$json[\"retweeted_status\"] !== undefined}}"
+            }
+          ]
+        },
+        "options": {
+          "dotNotation": true
+        }
+      },
+      "name": "Set Retweeted",
+      "type": "n8n-nodes-base.set",
+      "position": [
+        920,
+        640
+      ],
+      "typeVersion": 1,
+      "id": "a76f1b23-cf88-407b-8ba2-ea33057cd656"
+    },
+    {
+      "parameters": {
+        "chatId": "@reorx_share",
+        "text": "=<a href=\"{{$json[\"retweeted\"] ? $json[\"retweetedProxyUrl\"] : $json[\"proxyUrl\"]}} \">🐦</a> {{$json[\"retweeted\"] ? \"RT @\" + $json[\"retweetedUsername\"] + \": \" + $json[\"retweetedFullText\"] : $json[\"tweet\"]}}\n\n<a href=\"{{$json[\"retweeted\"] ? $json[\"retweetedUrl\"] : $json[\"url\"]}} \">↩</a>  {{$json[\"retweeted\"] ? \"#retweet\" : \"#tweet\"}}",
+        "additionalFields": {
+          "parse_mode": "HTML"
+        }
+      },
+      "name": "Telegram",
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1,
+      "position": [
+        1240,
+        640
+      ],
+      "id": "9a2a7920-ffff-4c47-8aea-f3cf2a4a31b0",
+      "credentials": {
+        "telegramApi": {
+          "id": "8",
+          "name": "Telegram reorx_share_bot"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "interval": 5,
+        "unit": "minutes"
+      },
+      "name": "Interval",
+      "type": "n8n-nodes-base.interval",
+      "typeVersion": 1,
+      "position": [
+        440,
+        640
+      ],
+      "id": "af20a6e8-3226-4876-a93f-c937b4e02a83"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "boolean": [
+            {
+              "value1": "={{$json[\"in_reply_to_screen_name\"] && $json[\"in_reply_to_screen_name\"] !== \"novoreorx\"}}",
+              "value2": "={{true}}"
+            }
+          ]
+        }
+      },
+      "name": "IF reply to others",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 1,
+      "position": [
+        780,
+        460
+      ],
+      "id": "b842a48f-3319-42b9-8f70-8190d99353da"
+    }
+  ],
+  "connections": {
+    "Twitter": {
+      "main": [
+        [
+          {
+            "node": "IF reply to others",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Function": {
+      "main": [
+        [
+          {
+            "node": "Telegram",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Set Retweeted": {
+      "main": [
+        [
+          {
+            "node": "Function",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Interval": {
+      "main": [
+        [
+          {
+            "node": "Twitter",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "IF reply to others": {
+      "main": [
+        [],
+        [
+          {
+            "node": "Set Retweeted",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "createdAt": "2022-09-11T01:06:20.781Z",
+  "updatedAt": "2022-09-12T05:45:52.112Z",
+  "settings": {},
+  "staticData": {
+    "node:Function": {}
+  },
+  "pinData": {},
+  "tags": []
+}

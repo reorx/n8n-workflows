@@ -1,16 +1,17 @@
 {
-  "id": 10,
+  "id": 7,
   "name": "douban activities to tg",
   "active": true,
   "nodes": [
     {
       "parameters": {},
+      "id": "06d7e9d8-4073-459d-b8b4-53dd6779e7a8",
       "name": "Start",
       "type": "n8n-nodes-base.start",
       "typeVersion": 1,
       "position": [
-        -200,
-        340
+        440,
+        320
       ]
     },
     {
@@ -21,9 +22,10 @@
       "type": "n8n-nodes-base.rssFeedRead",
       "typeVersion": 1,
       "position": [
-        20,
-        340
-      ]
+        660,
+        440
+      ],
+      "id": "0d82a4aa-261f-42b7-b60a-74441e3a1bb1"
     },
     {
       "parameters": {
@@ -33,9 +35,10 @@
       "type": "n8n-nodes-base.function",
       "typeVersion": 1,
       "position": [
-        360,
-        340
-      ]
+        1000,
+        440
+      ],
+      "id": "d01d4c80-88e1-41cd-8f49-5384af585522"
     },
     {
       "parameters": {
@@ -49,12 +52,13 @@
       "type": "n8n-nodes-base.telegram",
       "typeVersion": 1,
       "position": [
-        520,
-        500
+        1160,
+        600
       ],
+      "id": "7d6b7f60-720c-4060-9e2e-20694f655511",
       "credentials": {
         "telegramApi": {
-          "id": "1",
+          "id": "2",
           "name": "Telegram reorx_share_bot"
         }
       }
@@ -68,9 +72,10 @@
       "type": "n8n-nodes-base.interval",
       "typeVersion": 1,
       "position": [
-        -200,
-        500
-      ]
+        440,
+        600
+      ],
+      "id": "98f31181-3749-43d7-afc8-d0e29a328a8f"
     },
     {
       "parameters": {
@@ -80,9 +85,10 @@
       "type": "n8n-nodes-base.function",
       "typeVersion": 1,
       "position": [
-        200,
-        500
-      ]
+        840,
+        600
+      ],
+      "id": "090d339e-efae-4320-88d7-4933e9ba56d5"
     }
   ],
   "connections": {
@@ -102,17 +108,6 @@
         [
           {
             "node": "Telegram",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "Start": {
-      "main": [
-        [
-          {
-            "node": "RSS Feed Read",
             "type": "main",
             "index": 0
           }
@@ -142,12 +137,12 @@
       ]
     }
   },
-  "createdAt": "2022-05-25T11:03:26.371Z",
-  "updatedAt": "2022-08-23T15:15:15.000Z",
-  "settings": {
-    "errorWorkflow": "12"
-  },
+  "createdAt": "2022-09-11T01:32:40.941Z",
+  "updatedAt": "2022-09-12T05:35:04.044Z",
+  "settings": {},
   "staticData": {
     "global": {}
-  }
+  },
+  "pinData": {},
+  "tags": []
 }

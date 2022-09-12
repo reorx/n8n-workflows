@@ -1,15 +1,16 @@
 {
-  "id": 5,
+  "id": 3,
   "name": "youtube like to tg",
   "active": true,
   "nodes": [
     {
       "parameters": {},
+      "id": "049ebee4-9886-4912-9d03-1adc61bf0020",
       "name": "Start",
       "type": "n8n-nodes-base.start",
       "typeVersion": 1,
       "position": [
-        240,
+        440,
         300
       ]
     },
@@ -25,12 +26,13 @@
       "type": "n8n-nodes-base.youTube",
       "typeVersion": 1,
       "position": [
-        460,
-        300
+        660,
+        440
       ],
+      "id": "047b5d8a-eb97-4ea3-abf8-db8534e2be8d",
       "credentials": {
         "youTubeOAuth2Api": {
-          "id": "5",
+          "id": "11",
           "name": "YouTube account"
         }
       }
@@ -43,9 +45,10 @@
       "type": "n8n-nodes-base.function",
       "typeVersion": 1,
       "position": [
-        660,
-        300
-      ]
+        860,
+        440
+      ],
+      "id": "d7d8bf26-4d8d-4b10-8617-cceef11f97bb"
     },
     {
       "parameters": {
@@ -59,12 +62,13 @@
       "type": "n8n-nodes-base.telegram",
       "typeVersion": 1,
       "position": [
-        860,
-        300
+        1060,
+        440
       ],
+      "id": "38db2024-9fe9-4325-99ae-e6a9aa3e9127",
       "credentials": {
         "telegramApi": {
-          "id": "1",
+          "id": "8",
           "name": "Telegram reorx_share_bot"
         }
       }
@@ -78,23 +82,13 @@
       "type": "n8n-nodes-base.interval",
       "typeVersion": 1,
       "position": [
-        240,
-        500
-      ]
+        440,
+        640
+      ],
+      "id": "32aa9ecb-3a55-4ed3-a392-d04e77371d24"
     }
   ],
   "connections": {
-    "Start": {
-      "main": [
-        [
-          {
-            "node": "YouTube",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
     "YouTube": {
       "main": [
         [
@@ -129,12 +123,12 @@
       ]
     }
   },
-  "createdAt": "2022-05-23T09:26:33.126Z",
-  "updatedAt": "2022-08-23T14:45:15.000Z",
-  "settings": {
-    "errorWorkflow": "12"
-  },
+  "createdAt": "2022-09-11T00:54:07.512Z",
+  "updatedAt": "2022-09-12T05:43:36.375Z",
+  "settings": {},
   "staticData": {
     "global": {}
-  }
+  },
+  "pinData": {},
+  "tags": []
 }

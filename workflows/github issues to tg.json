@@ -1,16 +1,17 @@
 {
-  "id": 8,
+  "id": 5,
   "name": "github issues to tg",
-  "active": false,
+  "active": true,
   "nodes": [
     {
       "parameters": {},
+      "id": "cdfabdea-d43e-4260-a378-81e11177bc4f",
       "name": "Start",
       "type": "n8n-nodes-base.start",
       "typeVersion": 1,
       "position": [
-        -340,
-        540
+        640,
+        460
       ]
     },
     {
@@ -25,12 +26,13 @@
       "type": "n8n-nodes-base.telegram",
       "typeVersion": 1,
       "position": [
-        400,
-        800
+        1380,
+        660
       ],
+      "id": "b95ed716-a2dd-49ce-b71e-3292d9e2ce74",
       "credentials": {
         "telegramApi": {
-          "id": "1",
+          "id": "8",
           "name": "Telegram reorx_share_bot"
         }
       }
@@ -43,9 +45,10 @@
       "type": "n8n-nodes-base.interval",
       "typeVersion": 1,
       "position": [
-        -340,
-        820
-      ]
+        640,
+        680
+      ],
+      "id": "c184f40d-ead0-43a5-8629-9d67d73994b4"
     },
     {
       "parameters": {
@@ -57,13 +60,14 @@
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 1,
       "position": [
-        -120,
-        660
+        860,
+        520
       ],
+      "id": "22769e21-ca57-4f78-a161-3be2d2da68c2",
       "credentials": {
         "httpHeaderAuth": {
-          "id": "8",
-          "name": "github PAT"
+          "id": "10",
+          "name": "GitHub PAT"
         }
       }
     },
@@ -75,9 +79,10 @@
       "type": "n8n-nodes-base.function",
       "typeVersion": 1,
       "position": [
-        220,
-        660
-      ]
+        1200,
+        520
+      ],
+      "id": "e2879599-36fd-4374-9943-3adc34f0137c"
     },
     {
       "parameters": {
@@ -88,23 +93,13 @@
       "type": "n8n-nodes-base.itemLists",
       "typeVersion": 1,
       "position": [
-        60,
-        800
-      ]
+        1040,
+        660
+      ],
+      "id": "ee4786c8-8f29-42ff-bb32-e80c449425c1"
     }
   ],
   "connections": {
-    "Start": {
-      "main": [
-        [
-          {
-            "node": "HTTP Request",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
     "Interval": {
       "main": [
         [
@@ -150,12 +145,12 @@
       ]
     }
   },
-  "createdAt": "2022-05-24T17:23:28.596Z",
-  "updatedAt": "2022-05-25T14:43:04.686Z",
-  "settings": {
-    "errorWorkflow": "12"
-  },
+  "createdAt": "2022-09-11T01:28:39.483Z",
+  "updatedAt": "2022-09-12T05:10:21.288Z",
+  "settings": {},
   "staticData": {
     "global": {}
-  }
+  },
+  "pinData": {},
+  "tags": []
 }

@@ -1,16 +1,17 @@
 {
-  "id": 11,
+  "id": 1,
   "name": "pinboard to tg",
   "active": true,
   "nodes": [
     {
       "parameters": {},
+      "id": "3f1e847f-67ba-4f2d-a7d9-7d7bad2f0471",
       "name": "Start",
       "type": "n8n-nodes-base.start",
       "typeVersion": 1,
       "position": [
-        -340,
-        660
+        440,
+        360
       ]
     },
     {
@@ -25,12 +26,13 @@
       "type": "n8n-nodes-base.telegram",
       "typeVersion": 1,
       "position": [
-        380,
-        800
+        1160,
+        580
       ],
+      "id": "79421e11-eb54-4f08-b282-b7a40ef9ef4b",
       "credentials": {
         "telegramApi": {
-          "id": "1",
+          "id": "8",
           "name": "Telegram reorx_share_bot"
         }
       }
@@ -44,9 +46,10 @@
       "type": "n8n-nodes-base.interval",
       "typeVersion": 1,
       "position": [
-        -340,
-        820
-      ]
+        440,
+        600
+      ],
+      "id": "942d61db-2a8b-4cf1-8d2b-e04a4eca48da"
     },
     {
       "parameters": {
@@ -66,13 +69,14 @@
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 1,
       "position": [
-        -120,
-        660
+        660,
+        440
       ],
+      "id": "06bbe285-d27e-4923-9de7-73fe376aec92",
       "credentials": {
         "httpQueryAuth": {
-          "id": "9",
-          "name": "pinboard token in qs"
+          "id": "7",
+          "name": "pinboard token"
         }
       }
     },
@@ -85,9 +89,10 @@
       "type": "n8n-nodes-base.itemLists",
       "typeVersion": 1,
       "position": [
-        60,
-        800
-      ]
+        840,
+        580
+      ],
+      "id": "3eb8bc62-6b6c-428c-b076-375fddb784b0"
     },
     {
       "parameters": {
@@ -97,23 +102,13 @@
       "type": "n8n-nodes-base.function",
       "typeVersion": 1,
       "position": [
-        220,
-        660
-      ]
+        1000,
+        440
+      ],
+      "id": "940b9f00-b45e-4fed-8c05-0f895603bd1d"
     }
   ],
   "connections": {
-    "Start": {
-      "main": [
-        [
-          {
-            "node": "HTTP Request",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
     "Interval": {
       "main": [
         [
@@ -159,12 +154,12 @@
       ]
     }
   },
-  "createdAt": "2022-05-25T12:49:47.918Z",
-  "updatedAt": "2022-08-23T15:20:22.000Z",
-  "settings": {
-    "errorWorkflow": "12"
-  },
+  "createdAt": "2022-09-11T00:38:26.637Z",
+  "updatedAt": "2022-09-12T05:50:04.300Z",
+  "settings": {},
   "staticData": {
     "global": {}
-  }
+  },
+  "pinData": {},
+  "tags": []
 }

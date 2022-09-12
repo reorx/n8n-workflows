@@ -1,16 +1,17 @@
 {
-  "id": 7,
+  "id": 2,
   "name": "spotify like to tg",
   "active": true,
   "nodes": [
     {
       "parameters": {},
+      "id": "4d50059f-9b6e-444e-8b28-3a824725f813",
       "name": "Start",
       "type": "n8n-nodes-base.start",
       "typeVersion": 1,
       "position": [
-        260,
-        300
+        440,
+        340
       ]
     },
     {
@@ -21,13 +22,14 @@
       "name": "Get liked tracks",
       "type": "n8n-nodes-base.spotify",
       "position": [
-        500,
-        300
+        680,
+        440
       ],
       "typeVersion": 1,
+      "id": "2da39c10-9cb3-4b82-924f-9ca303d8dad2",
       "credentials": {
         "spotifyOAuth2Api": {
-          "id": "6",
+          "id": "13",
           "name": "Spotify account"
         }
       }
@@ -40,9 +42,10 @@
       "type": "n8n-nodes-base.function",
       "typeVersion": 1,
       "position": [
-        720,
-        300
-      ]
+        900,
+        440
+      ],
+      "id": "4e02dd7d-e122-44fb-a7e3-6f13355f377f"
     },
     {
       "parameters": {
@@ -56,12 +59,13 @@
       "type": "n8n-nodes-base.telegram",
       "typeVersion": 1,
       "position": [
-        920,
-        300
+        1100,
+        440
       ],
+      "id": "5adf1cff-b04a-4d37-956f-ffdf71118c65",
       "credentials": {
         "telegramApi": {
-          "id": "1",
+          "id": "8",
           "name": "Telegram reorx_share_bot"
         }
       }
@@ -75,23 +79,13 @@
       "type": "n8n-nodes-base.interval",
       "typeVersion": 1,
       "position": [
-        260,
-        520
-      ]
+        440,
+        660
+      ],
+      "id": "2c8cdb08-4a8b-4d34-81ef-e414451dd6ac"
     }
   ],
   "connections": {
-    "Start": {
-      "main": [
-        [
-          {
-            "node": "Get liked tracks",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
     "Get liked tracks": {
       "main": [
         [
@@ -126,12 +120,12 @@
       ]
     }
   },
-  "createdAt": "2022-05-23T17:28:53.784Z",
-  "updatedAt": "2022-08-23T15:15:21.000Z",
-  "settings": {
-    "errorWorkflow": "12"
-  },
+  "createdAt": "2022-09-11T00:47:07.614Z",
+  "updatedAt": "2022-09-12T05:47:24.944Z",
+  "settings": {},
   "staticData": {
     "global": {}
-  }
+  },
+  "pinData": {},
+  "tags": []
 }
