@@ -1,0 +1,148 @@
+{
+  "id": 12,
+  "name": "new blog",
+  "active": true,
+  "nodes": [
+    {
+      "parameters": {},
+      "id": "fd26b9f8-963e-4a0f-8944-c61b7debca7a",
+      "name": "Start",
+      "type": "n8n-nodes-base.start",
+      "typeVersion": 1,
+      "position": [
+        440,
+        280
+      ]
+    },
+    {
+      "parameters": {
+        "url": "https://reorx.com/blog/feed.xml"
+      },
+      "name": "RSS Feed Read",
+      "type": "n8n-nodes-base.rssFeedRead",
+      "typeVersion": 1,
+      "position": [
+        660,
+        440
+      ],
+      "id": "dfac241d-c05e-4f2d-82c1-1a865d6469d0"
+    },
+    {
+      "parameters": {
+        "functionCode": "/* only return new items */\nconst staticData = getWorkflowStaticData('global');\nconst lastItemId = staticData.lastItemId;\n\nconsole.log('lastItemId', lastItemId);\nconst firstItem = items[0];\nlet newItems = [];\n\nfunction getId(item) {\n  return item.json.guid;\n}\n\nif (lastItemId) {\n  for (const item of items) {\n    if (getId(item) === lastItemId) {\n      break;\n    }\n    newItems.push(item)\n  }\n} else {\n  newItems = [firstItem]\n}\n\nstaticData.lastItemId = getId(firstItem)\nreturn newItems.reverse()"
+      },
+      "name": "Function",
+      "type": "n8n-nodes-base.function",
+      "typeVersion": 1,
+      "position": [
+        860,
+        440
+      ],
+      "id": "ab97cb01-bb44-4845-a345-5d57365b49b6"
+    },
+    {
+      "parameters": {
+        "text": "=新文章: {{$node[\"Function\"].json[\"title\"]}}\n{{$node[\"Function\"].json[\"link\"]}}\n\n{{$node[\"Function\"].json[\"contentSnippet\"]}}",
+        "additionalFields": {}
+      },
+      "id": "e9d0a60e-c51b-4255-b9dc-93f06e6380f0",
+      "name": "Twitter",
+      "type": "n8n-nodes-base.twitter",
+      "typeVersion": 1,
+      "position": [
+        1100,
+        280
+      ],
+      "credentials": {
+        "twitterOAuth1Api": {
+          "id": "12",
+          "name": "Twitter OAuth account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "chatId": "@reorx_share",
+        "text": "=<a href=\"https://t.me/iv?url={{$node[\"RSS Feed Read\"].json[\"link\"]}}&rhash=72a84540ff6616\">📝</a> {{$node[\"RSS Feed Read\"].json[\"title\"]}} #blog\n\n{{$json[\"contentSnippet\"]}}\n\n{{$node[\"RSS Feed Read\"].json[\"link\"]}}",
+        "additionalFields": {
+          "parse_mode": "HTML"
+        }
+      },
+      "name": "Telegram",
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1,
+      "position": [
+        1100,
+        580
+      ],
+      "id": "e3e410ff-ffa1-44db-83b5-57229eaf1ddd",
+      "credentials": {
+        "telegramApi": {
+          "id": "8",
+          "name": "Telegram reorx_share_bot"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "path": "9a883425-69e8-4add-b061-9371d85003b3",
+        "options": {}
+      },
+      "id": "3109f5d1-704b-4f7d-b95a-1bde67036f4e",
+      "name": "Webhook",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 1,
+      "position": [
+        440,
+        440
+      ],
+      "webhookId": "9a883425-69e8-4add-b061-9371d85003b3"
+    }
+  ],
+  "connections": {
+    "RSS Feed Read": {
+      "main": [
+        [
+          {
+            "node": "Function",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Function": {
+      "main": [
+        [
+          {
+            "node": "Twitter",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Telegram",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "RSS Feed Read",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "createdAt": "2022-09-13T02:38:12.521Z",
+  "updatedAt": "2022-10-24T13:14:54.929Z",
+  "settings": {},
+  "staticData": {
+    "global": {}
+  }
+}

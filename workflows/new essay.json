@@ -1,0 +1,367 @@
+{
+  "id": 8,
+  "name": "new essay",
+  "active": true,
+  "nodes": [
+    {
+      "parameters": {},
+      "id": "2d1d79db-700e-4e2f-bb7e-45a249ecb625",
+      "name": "Start",
+      "type": "n8n-nodes-base.start",
+      "typeVersion": 1,
+      "position": [
+        440,
+        280
+      ]
+    },
+    {
+      "parameters": {
+        "url": "https://reorx.com/essays/feed.xml"
+      },
+      "name": "RSS Feed Read",
+      "type": "n8n-nodes-base.rssFeedRead",
+      "typeVersion": 1,
+      "position": [
+        660,
+        440
+      ],
+      "id": "3c0eace1-46e0-404e-8485-be8eb01e64f8"
+    },
+    {
+      "parameters": {
+        "functionCode": "/* only return new items */\nconst staticData = this.getWorkflowStaticData('global');\nconst lastItemId = staticData.lastItemId;\n\nconsole.log('lastItemId', lastItemId);\nconst firstItem = items[0];\nlet newItems = [];\n\nfunction getId(item) {\n  return item.json.guid;\n}\n\nif (lastItemId) {\n  for (const item of items) {\n    if (getId(item) === lastItemId) {\n      break;\n    }\n    newItems.push(item)\n  }\n} else {\n  newItems = [firstItem]\n}\n\nstaticData.lastItemId = getId(firstItem)\nconsole.log('newItems', newItems)\nreturn newItems.reverse()"
+      },
+      "name": "Function",
+      "type": "n8n-nodes-base.function",
+      "typeVersion": 1,
+      "position": [
+        860,
+        440
+      ],
+      "id": "61d5b2e5-b221-48a9-92d7-cfcb5209c077"
+    },
+    {
+      "parameters": {
+        "value": "={{ $json[\"pubDate\"] }}",
+        "dataPropertyName": "date",
+        "toFormat": "YYYY-MM-DD",
+        "options": {}
+      },
+      "id": "a14d68c9-2458-4d04-8410-a64b705cec2f",
+      "name": "Date & Time",
+      "type": "n8n-nodes-base.dateTime",
+      "typeVersion": 1,
+      "position": [
+        1040,
+        440
+      ]
+    },
+    {
+      "parameters": {
+        "text": "={{$node[\"HTML Extract\"].json[\"tags\"].includes(\"english\") ? \"New essay\" : \"新随笔\"}}: {{$node[\"Function\"].json[\"title\"]}}\n\n{{$node[\"Function\"].json[\"link\"]}}",
+        "additionalFields": {
+          "attachments": "=imageData"
+        }
+      },
+      "id": "257430b0-6c41-449b-93fe-4e2cefde7ceb",
+      "name": "Twitter",
+      "type": "n8n-nodes-base.twitter",
+      "typeVersion": 1,
+      "position": [
+        1680,
+        360
+      ],
+      "credentials": {
+        "twitterOAuth1Api": {
+          "id": "12",
+          "name": "Twitter OAuth account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpBasicAuth",
+        "requestMethod": "POST",
+        "url": "https://hcti.io/v1/image",
+        "options": {},
+        "bodyParametersUi": {
+          "parameter": [
+            {
+              "name": "html",
+              "value": "=<div class=\"article-mobile\">\n{{$node[\"Function\"].json[\"content:encoded\"]}}\n  <hr>\n  <div class=\"title\">{{$node[\"Function\"].json[\"title\"]}}</div>\n  <div class=\"meta\">{{$node[\"Date & Time\"].json[\"date\"]}} • reorx.com</div>\n</div>"
+            },
+            {
+              "name": "css",
+              "value": ".article-mobile {\n  width: 390px;\n  font-size: 20px;\n  color: #222;\n  line-height: 1.6em;\n  font-family: \"Noto Sans SC\", sans-serif;\n  background: #fff;\n  padding: 0.5em 0.8em 1.2em;\n}\na,\na:visited {\n  color: #333;\n  font-weight: bold;\n  word-break: break-all;\n}\nblockquote {\n  margin: 20px 0;\n  padding: 0 14px;\n  border-left: 3px solid #ccc;\n}\n.article-mobile li {\n  margin-bottom: 0.3em;\n}\n.footnotes {\n  font-size: 0.8em;\n}\n.footnote-backref {\n  display: none;\n}\nhr {\n  display: block;\n  height: 1px;\n  border: 0;\n  border-top: 1px solid #ccc;\n  margin: 1.4em 0;\n  padding: 0;\n}\n\n.title {\n  font-weight: bold;\n  color: #555;\n  margin-bottom: .5em;\n  text-align: right;\n}\n.meta {\n  color: #aaa;\n  font-size: 14px;\n  line-height: 1em;\n  text-align: right;\n}\n"
+            },
+            {
+              "name": "google_fonts",
+              "value": "Noto Sans SC"
+            },
+            {
+              "name": "device_scale",
+              "value": "2"
+            }
+          ]
+        }
+      },
+      "id": "58f6f6e8-df2d-4662-974d-5b5e9b65db63",
+      "name": "Send text to image request",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 2,
+      "position": [
+        1240,
+        280
+      ],
+      "credentials": {
+        "httpBasicAuth": {
+          "id": "14",
+          "name": "HCTI credential"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "url": "={{ $json[\"url\"] }}",
+        "responseFormat": "file",
+        "dataPropertyName": "imageData",
+        "options": {}
+      },
+      "id": "f6f1cac4-81d2-44d8-ba80-05f68696ec44",
+      "name": "Get image data",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 2,
+      "position": [
+        1400,
+        280
+      ]
+    },
+    {
+      "parameters": {
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpBasicAuth",
+        "requestMethod": "POST",
+        "url": "https://hcti.io/v1/image",
+        "options": {},
+        "bodyParametersUi": {
+          "parameter": [
+            {
+              "name": "html",
+              "value": "<div class=\"article-mobile\">\n  <p>一个农夫发现了个中奥妙，他赶快回家，从圈里拉出了他家的老牛。老牛被牵到了公园里， 农夫让它在天竺鼠的边上吃草，并且，也把他的<a href=\"https://meiriyiwen.com/\">帽子</a>放在了旁边。人们围过来，往他的帽子里扔硬币。</p>\n <blockquote><p>有没有哪个 app 可以导入一堆照片然后把其中的地理位置信息连成一个轨迹？</p></blockquote>\n  <p>2018 年 Moves 被 Facebook 关闭，成为 FAANG 资本化的又一个牺牲品 <a href=\"https://about.fb.com/news/2018/07/hello-tbh-moving-on/\">https://about.fb.com/news/2018/07/hello-tbh-moving-on/</a></p>\n  <p>在斯图加特的一个公园里<sup id=\"fnref:1\"><a href=\"#fn:1\" class=\"footnote-ref\" role=\"doc-noteref\">1</a></sup>，来了一位先生，他手里端着一个纸盒，盒子里有一只天竺鼠。他打开盒子，把天竺鼠放到草地上。</p>\n  <ul>\n    <li><p>Moves</p><p>接触的第一款位置追踪应用，也是最喜欢的一个。除了有些耗电，各方面都几乎完美。我从 2014 年开始重度使用了一两年的时间，最后因为厌倦了手机发热而放弃。</p><p>2018 年 Moves 被 Facebook 关闭，成为 FAANG 资本化的又一个牺牲品 <a href=\"https://about.fb.com/news/2018/07/hello-tbh-moving-on/\">https://about.fb.com/news/2018/07/hello-tbh-moving-on/</a></p><blockquote><p>In 2014, we bought the fitness app&nbsp;<strong>Moves</strong>. It records your daily activity — including walking, cycling and running. We’re deprecating the Moves app and Moves API on July 31.</p></blockquote></li>\n    <li>他答道：你们看，它会在草地上跑，会吃草。</li>\n    <li>一会儿，来了一个车夫，他要展示他的马。随后，有人把他的摩托车停在了草地上，车边放着一顶帽子。又有个人把睡觉的床抬到了公园，还有个人要把他的随身小刀给人看，甚至有一个居然扛来了一套沙发。所有用来展示的东西边上，都有一顶帽子。\n    </li>\n  </ul>\n  <p>每一处，都有人在问同样的问题，问这些东西是否与众不同。他们付了钱，也得到了答案。</p>\n\n  <div class=\"footnotes\" role=\"doc-endnotes\">\n    <hr>\n    <ol>\n      <li id=\"fn:1\">\n        <p>Specs: <a href=\"https://support.apple.com/kb/sp770?locale=en_US\">iPhone X</a>, <a href=\"https://support.apple.com/kb/SP805?locale=en_US\">iPhone 11 Pro</a>, <a href=\"https://support.apple.com/kb/SP831?locale=en_US\">iPhone 12 Pro</a>, <a href=\"https://support.apple.com/kb/SP852?locale=en_US\">iPhone 13 Pro</a>&#160;<a href=\"#fnref:1\" class=\"footnote-backref\" role=\"doc-backlink\">&#x21a9;&#xfe0e;</a></p>\n      </li>\n      <li id=\"fn:2\">\n        <p>Specs: <a href=\"https://support.apple.com/kb/SP804?locale=en_US\">iPhone 11</a>, <a href=\"https://support.apple.com/kb/SP830?locale=en_US\">iPhone 12</a>, <a href=\"https://support.apple.com/kb/SP851?locale=en_US\">iPhone 13</a>&#160;<a href=\"#fnref:2\" class=\"footnote-backref\" role=\"doc-backlink\">&#x21a9;&#xfe0e;</a></p>\n      </li>\n    </ol>\n  </div>\n\n  <hr>\n  <div class=\"title\">卡莫迪太太的小店</div>\n  <div class=\"meta\">2022-09-12 • reorx.com</div>\n</div>"
+            },
+            {
+              "name": "css",
+              "value": ".article-mobile {\n  width: 390px;\n  font-size: 20px;\n  color: #222;\n  line-height: 1.6em;\n  font-family: \"Noto Sans SC\", sans-serif;\n  background: #fff;\n  padding: 0.5em 0.8em 1.2em;\n}\na,\na:visited {\n  color: #333;\n  font-weight: bold;\n  word-break: break-all;\n}\nblockquote {\n  margin: 20px 0;\n  padding: 0 14px;\n  border-left: 3px solid #ccc;\n}\n.article-mobile li {\n  margin-bottom: 0.3em;\n}\n.footnotes {\n  font-size: 0.8em;\n}\n.footnote-backref {\n  display: none;\n}\nhr {\n  display: block;\n  height: 1px;\n  border: 0;\n  border-top: 1px solid #ccc;\n  margin: 1.4em 0;\n  padding: 0;\n}\n\n.title {\n  font-weight: bold;\n  color: #555;\n  margin-bottom: .5em;\n  text-align: right;\n}\n.meta {\n  color: #aaa;\n  font-size: 14px;\n  line-height: 1em;\n  text-align: right;\n}\n"
+            },
+            {
+              "name": "google_fonts",
+              "value": "Noto Sans SC"
+            },
+            {
+              "name": "device_scale",
+              "value": "2"
+            }
+          ]
+        }
+      },
+      "id": "1d101ce1-036d-419c-8ebc-12f91b69bd07",
+      "name": "Test text to image",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 2,
+      "position": [
+        1240,
+        120
+      ],
+      "credentials": {
+        "httpBasicAuth": {
+          "id": "14",
+          "name": "HCTI credential"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "chatId": "@reorx_share",
+        "text": "=<a href=\"https://t.me/iv?url={{$node[\"RSS Feed Read\"].json[\"link\"]}}&rhash=72a84540ff6616\">📝</a> {{$node[\"RSS Feed Read\"].json[\"title\"]}}  #essay\n\n{{$node[\"RSS Feed Read\"].json[\"link\"]}}",
+        "additionalFields": {
+          "parse_mode": "HTML"
+        }
+      },
+      "name": "Telegram1",
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1,
+      "position": [
+        1280,
+        560
+      ],
+      "id": "37fe87e1-651e-4a83-bdf4-44a0604efdd3",
+      "credentials": {
+        "telegramApi": {
+          "id": "8",
+          "name": "Telegram reorx_share_bot"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "url": "={{$json[\"link\"]}}",
+        "responseFormat": "string",
+        "options": {}
+      },
+      "id": "4a101c3b-5bb8-45b7-9b23-af655a09a7d0",
+      "name": "HTTP Request",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 2,
+      "position": [
+        680,
+        1000
+      ]
+    },
+    {
+      "parameters": {
+        "extractionValues": {
+          "values": [
+            {
+              "key": "tags",
+              "cssSelector": "meta[name=keywords]",
+              "returnValue": "attribute",
+              "attribute": "content"
+            }
+          ]
+        },
+        "options": {
+          "trimValues": false
+        }
+      },
+      "id": "bde03faa-78fa-48b6-a94f-ccd5718a7def",
+      "name": "HTML Extract",
+      "type": "n8n-nodes-base.htmlExtract",
+      "typeVersion": 1,
+      "position": [
+        880,
+        1000
+      ]
+    },
+    {
+      "parameters": {
+        "interval": 10,
+        "unit": "minutes"
+      },
+      "id": "334df8f3-bada-43ac-8476-768df1e1d881",
+      "name": "Interval",
+      "type": "n8n-nodes-base.interval",
+      "typeVersion": 1,
+      "position": [
+        440,
+        460
+      ]
+    }
+  ],
+  "connections": {
+    "RSS Feed Read": {
+      "main": [
+        [
+          {
+            "node": "Function",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Function": {
+      "main": [
+        [
+          {
+            "node": "Date & Time",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Date & Time": {
+      "main": [
+        [
+          {
+            "node": "Telegram1",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "HTTP Request",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Send text to image request": {
+      "main": [
+        [
+          {
+            "node": "Get image data",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get image data": {
+      "main": [
+        [
+          {
+            "node": "Twitter",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Start": {
+      "main": [
+        []
+      ]
+    },
+    "HTTP Request": {
+      "main": [
+        [
+          {
+            "node": "HTML Extract",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTML Extract": {
+      "main": [
+        [
+          {
+            "node": "Send text to image request",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Interval": {
+      "main": [
+        [
+          {
+            "node": "RSS Feed Read",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "createdAt": "2022-09-11T01:33:49.799Z",
+  "updatedAt": "2022-11-25T23:17:15.631Z",
+  "settings": {},
+  "staticData": {
+    "global": {}
+  }
+}

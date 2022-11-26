@@ -75,7 +75,7 @@
     },
     {
       "parameters": {
-        "interval": 30,
+        "interval": 10,
         "unit": "minutes"
       },
       "name": "Interval",
@@ -124,11 +124,9 @@
     }
   },
   "createdAt": "2022-09-11T00:54:07.512Z",
-  "updatedAt": "2022-09-12T05:43:36.375Z",
+  "updatedAt": "2022-11-25T23:17:15.363Z",
   "settings": {},
   "staticData": {
     "global": {}
-  },
-  "pinData": {},
-  "tags": []
+  }
 }

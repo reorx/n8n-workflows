@@ -58,14 +58,14 @@
       "id": "7d6b7f60-720c-4060-9e2e-20694f655511",
       "credentials": {
         "telegramApi": {
-          "id": "2",
+          "id": "8",
           "name": "Telegram reorx_share_bot"
         }
       }
     },
     {
       "parameters": {
-        "interval": 30,
+        "interval": 60,
         "unit": "minutes"
       },
       "name": "Interval",
@@ -138,11 +138,9 @@
     }
   },
   "createdAt": "2022-09-11T01:32:40.941Z",
-  "updatedAt": "2022-09-12T05:35:04.044Z",
+  "updatedAt": "2022-11-06T05:15:13.970Z",
   "settings": {},
   "staticData": {
     "global": {}
-  },
-  "pinData": {},
-  "tags": []
+  }
 }

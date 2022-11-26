@@ -1,16 +1,17 @@
 {
-  "id": 12,
+  "id": 13,
   "name": "ERROR TO TG",
   "active": false,
   "nodes": [
     {
       "parameters": {},
+      "id": "bc792796-f36b-4058-9eab-29b9080de0f5",
       "name": "Start",
       "type": "n8n-nodes-base.start",
       "typeVersion": 1,
       "position": [
-        240,
-        300
+        660,
+        280
       ]
     },
     {
@@ -19,9 +20,10 @@
       "type": "n8n-nodes-base.errorTrigger",
       "typeVersion": 1,
       "position": [
-        460,
-        300
-      ]
+        660,
+        440
+      ],
+      "id": "a80bd7f9-deb8-4ab8-ab8c-13e8402aecdf"
     },
     {
       "parameters": {
@@ -36,12 +38,13 @@
       "type": "n8n-nodes-base.telegram",
       "typeVersion": 1,
       "position": [
-        680,
-        300
+        880,
+        440
       ],
+      "id": "cd7a62c7-cef5-4b2d-882a-358c5ac4db50",
       "credentials": {
         "telegramApi": {
-          "id": "10",
+          "id": "9",
           "name": "Telegram reorx_notify_bot"
         }
       }
@@ -60,8 +63,8 @@
       ]
     }
   },
-  "createdAt": "2022-05-25T14:29:13.869Z",
-  "updatedAt": "2022-05-31T07:37:17.241Z",
+  "createdAt": "2022-09-23T07:22:16.612Z",
+  "updatedAt": "2022-10-24T13:14:50.468Z",
   "settings": {},
   "staticData": null
 }
